@@ -5,4 +5,7 @@ seaborn
 matplotlib
 xgboost
 catboost
+python-dotenv
+pymongo[srv]==4.1.1
+certifi
 -e .

@@ -1,0 +1,2 @@
+DATABASE_NAME = 'store'
+COLLECTION_NAME = 'sales'
