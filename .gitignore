@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+notebooks\store-sales-prediction.ipynb
+
 # C extensions
 *.so
 
