@@ -9,4 +9,5 @@ python-dotenv
 pymongo[srv]==4.1.1
 certifi
 PyYAML
+scipy
 -e .

@@ -1,4 +1,16 @@
 columns:
+# - Item_Identifier
+# - Item_Weight
+# - Item_Fat_Content
+# - Item_Visibility
+# - Item_Type
+# - Item_MRP
+# - Outlet_Identifier
+# - Outlet_Establishment_Year
+# - Outlet_Size
+# - Outlet_Location_Type
+# - Outlet_Type
+# - Item_Outlet_Sales
   - Item_Identifier : category
   - Item_Weight : float
   - Item_Fat_Content : category
@@ -13,10 +25,10 @@ columns:
   - Item_Outlet_Sales : float
 
 numerical_columns :
-  - Item_Weight : float
-  - Item_Visibility : float
-  - Item_MRP : float
-  - Outlet_Establishment_Year : int
-  - Item_Outlet_Sales : float
+  - Item_Weight
+  - Item_Visibility
+  - Item_MRP
+  - Outlet_Establishment_Year
+  - Item_Outlet_Sales
 
 drop_columns:
