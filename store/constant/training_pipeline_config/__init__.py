@@ -16,5 +16,5 @@ TEST_FILE_NAME:str = 'test.csv'
 
 PREPROCESSING_OBJECT_FILE_NAME:str = 'preprocessing.pkl'
 MODEL_FILE_NAME:str = 'model.pkl'
-SCHEMA_FILE_PATH = os.path.join('config', 'schema.yaml')
+SCHEMA_FILE_PATH = os.path.join('schema_config', 'schema.yaml')
 SCHEMA_DROP_COLS = 'drop_columns'

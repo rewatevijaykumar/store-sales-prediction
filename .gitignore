@@ -3,7 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-notebooks\store-sales-prediction.ipynb
+catboost_info/
+artifact/
+notebooks/store-sales-prediction.ipynb
 
 # C extensions
 *.so

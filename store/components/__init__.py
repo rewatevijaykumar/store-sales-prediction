@@ -1,0 +1,1 @@
+from store.components.training.data_ingestion import DataIngestion
