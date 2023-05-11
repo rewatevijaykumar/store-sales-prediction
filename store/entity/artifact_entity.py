@@ -17,3 +17,14 @@ DataTransformationArtifact = namedtuple('DataTransformationArtifact',
                                          'transformed_train_file_path',
                                          'transformed_test_file_path',
                                          'transformed_target_object_file_path'])
+
+RegressionMetricArtifact = namedtuple('RegressionMetricArtifact',[ 
+                                            'mse',
+                                            'mae',
+                                            'r2_score'])
+
+ModelTrainerArtifact = namedtuple('ModelTrainerArtifact',
+                                  ['trained_model_file_path',
+                                   'train_metric_artifact',
+                                   'test_metric_artifact'])
+

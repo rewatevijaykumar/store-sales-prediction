@@ -1,7 +1,4 @@
-from store.constant.training_pipeline_config import data_validation
-from store.constant.training_pipeline_config.data_transformation import DATA_TRANSFORMATION_DIR_NAME, DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR, DATA_TRANSFORMATION_TRANSFORMED_OBJECT_DIR
-from store.constant.training_pipeline_config.data_validation import DATA_VALIDATION_DIR_NAME, DATA_VALIDATION_DRIFT_REPORT_DIR, DATA_VALIDATION_DRIFT_REPORT_FILE_NAME, DATA_VALIDATION_INVALID_DIR, DATA_VALIDATION_VALID_DIR
-from store.entity.config_entity import DataTransformationConfig, DataValidationConfig, TrainingPipelineConfig, DataIngestionConfig
+from store.entity.config_entity import DataTransformationConfig, DataValidationConfig, ModelTrainerConfig, TrainingPipelineConfig, DataIngestionConfig
 from store.exception import CustomException
 from store.logger import logger
 from store.constant.training_pipeline_config import *
@@ -89,6 +86,21 @@ class StoreConfig():
             )
             logger.info(f'Data Transformation Config: {data_transformation_config}')
             return data_transformation_config
+        except Exception as e:
+            raise CustomException(e,sys)
+        
+    def get_model_trainer_config(self)->ModelTrainerConfig:
+        try:
+            model_trainer_dir = os.path.join(self.pipeline_config.artifact_dir,MODEL_TRAINER_DIR_NAME, self.timestamp)
+            model_trainer_config = ModelTrainerConfig(
+                model_trainer_dir=model_trainer_dir,
+                trained_model_file_path=os.path.join(model_trainer_dir,MODEL_TRAINER_TRAINED_MODEL_DIR,MODEL_TRAINER_TRAINED_MODEL_NAME),
+                expected_accuracy=MODEL_TRAINER_EXPECTED_SCORE,
+                overfitting_underfitting_threshold=MODEL_TRAINER_OVER_FITTING_UNDER_FITTING_THRESHOLD
+                 
+            )
+            logger.info(f'Model Trainer Config: {model_trainer_config}')
+            return model_trainer_config
         except Exception as e:
             raise CustomException(e,sys)
 

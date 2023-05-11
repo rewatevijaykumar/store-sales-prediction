@@ -23,3 +23,10 @@ DataTransformationConfig = namedtuple('DataTransformationConfig',['data_transfor
                                                                   'transformed_test_file_path',
                                                                   'transformed_object_file_path',
                                                                   'transformed_target_object_file_path'])
+
+
+ModelTrainerConfig = namedtuple('ModelTrainerConfig',
+                                ['model_trainer_dir',
+                                 'trained_model_file_path',
+                                 'expected_accuracy',
+                                 'overfitting_underfitting_threshold'])
