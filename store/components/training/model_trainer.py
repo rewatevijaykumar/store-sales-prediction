@@ -63,11 +63,10 @@ class ModelTrainer:
                 raise Exception('model is not good try to do more experimentation')
             
             preprocessor = load_object(self.data_transformation_artifact.transformed_object_file_path)
-            target_preprocessor = load_object(self.data_transformation_artifact.transformed_target_object_file_path)
 
             model_dir_path = os.path.dirname(self.model_trainer_config.trained_model_file_path)
             os.makedirs(model_dir_path,exist_ok=True)
-            store_model = StoreModel(preprocessor=preprocessor, target_preprocessor=target_preprocessor, model=model)
+            store_model = StoreModel(preprocessor=preprocessor, model=model)
             save_object(self.model_trainer_config.trained_model_file_path,obj=store_model)
 
             # model trainer artifact
