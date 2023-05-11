@@ -17,3 +17,9 @@ DataValidationConfig = namedtuple('DataValidationConfig', ['data_validation_dir'
                                                            'invalid_train_file_path',
                                                            'invalid_test_file_path',
                                                            'drift_report_file_path'])
+
+DataTransformationConfig = namedtuple('DataTransformationConfig',['data_transformation_dir', 
+                                                                  'transformed_train_file_path',
+                                                                  'transformed_test_file_path',
+                                                                  'transformed_object_file_path',
+                                                                  'transformed_target_object_file_path'])

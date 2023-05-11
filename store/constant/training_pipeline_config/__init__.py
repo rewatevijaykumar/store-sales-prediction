@@ -15,6 +15,7 @@ TRAIN_FILE_NAME:str = 'train.csv'
 TEST_FILE_NAME:str = 'test.csv'
 
 PREPROCESSING_OBJECT_FILE_NAME:str = 'preprocessing.pkl'
+TARGET_PREPROCESSING_OBJECT_FILE_NAME:str = 'target_preprocessing.pkl'
 MODEL_FILE_NAME:str = 'model.pkl'
 SCHEMA_FILE_PATH = os.path.join('schema_config', 'schema.yaml')
 SCHEMA_DROP_COLS = 'drop_columns'

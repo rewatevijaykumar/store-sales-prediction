@@ -6,7 +6,7 @@ from store.entity.artifact_entity import DataIngestionArtifact, DataValidationAr
 from store.entity.config_entity import DataValidationConfig
 from store.exception import CustomException
 from store.logger import logger
-from store.utils import read_yaml_file, write_yaml_file
+from store.utils import read_yaml_file, write_yaml_file, read_data
 import pandas as pd
 from scipy.stats import ks_2samp
 
@@ -16,6 +16,7 @@ class DataValidation:
                  data_ingestion_artifact:DataIngestionArtifact,
                  data_validation_config:DataValidationConfig):
         try:
+            logger.info(f"{'>>' * 20} Starting data validation {'<<' * 20}")
             self.data_ingestion_artifact = data_ingestion_artifact
             self.data_validation_config = data_validation_config
             self._schema_config = read_yaml_file(SCHEMA_FILE_PATH)
@@ -46,14 +47,7 @@ class DataValidation:
             return numerical_column_present
         except Exception as e:
             raise CustomException(e,sys)
-        
-    @staticmethod
-    def read_data(filepath)->DataFrame:
-        try:
-            return pd.read_csv(filepath)
-        except Exception as e:
-            raise CustomException(e,sys)
-        
+                
     def detect_dataset_drift(self,base_df, current_df, threshold=0.05) -> bool:
         try:
             status = True
@@ -89,8 +83,8 @@ class DataValidation:
             test_file_path = self.data_ingestion_artifact.test_file_path
 
             # reading data from train and test file location
-            train_dataframe = self.read_data(train_file_path)
-            test_dataframe = self.read_data(test_file_path)
+            train_dataframe = read_data(train_file_path)
+            test_dataframe = read_data(test_file_path)
 
             # Validate number of columns
             status = self.validate_number_of_columns(dataframe=train_dataframe)

@@ -64,7 +64,6 @@ class DataIngestion:
         try:
             logger.info('Starting Data Ingestion')
             dataframe = self.export_data_into_feature_store()
-            
             # dataframe.drop(self._schema_config['drop_columns'],axis=1)
             self.split_data_as_train_test(dataframe=dataframe)
             data_ingestion_artifact = DataIngestionArtifact(

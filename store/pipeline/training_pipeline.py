@@ -2,9 +2,10 @@ import os
 from re import A
 import sys
 from store.components.training.data_ingestion import DataIngestion
+from store.components.training.data_transformation import DataTransformation
 from store.components.training.data_validation import DataValidation
 from store.constant.training_pipeline_config import data_ingestion
-from store.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact
+from store.entity.artifact_entity import DataIngestionArtifact, DataTransformationArtifact, DataValidationArtifact
 from store.exception import CustomException
 from store.logger import logger
 from store.config.pipeline.training import StoreConfig
@@ -31,10 +32,21 @@ class TrainingPipeline:
             return data_validation_artifact
         except Exception as e:
             raise CustomException(e,sys)
+        
+    def start_data_transformation(self,data_validation_artifact:DataValidationArtifact)->DataTransformationArtifact:
+        try:
+            data_transformation_config = self.store_config.get_data_transformation_config()
+            data_transformation = DataTransformation(data_validation_artifact=data_validation_artifact,
+                                                     data_transformation_config=data_transformation_config)
+            data_transformation_artifact = data_transformation.initiate_data_transformation()
+            return data_transformation_artifact
+        except Exception as e:
+            CustomException(e,sys)
 
     def run_pipeline(self):
         try:
             data_ingestion_artifact = self.start_data_ingestion()
             data_validation_artifact = self.start_data_validation(data_ingestion_artifact=data_ingestion_artifact)
+            data_transformation_artifact = self.start_data_transformation(data_validation_artifact=data_validation_artifact)
         except Exception as e:
             raise CustomException(e,sys)

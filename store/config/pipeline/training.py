@@ -1,5 +1,7 @@
+from store.constant.training_pipeline_config import data_validation
+from store.constant.training_pipeline_config.data_transformation import DATA_TRANSFORMATION_DIR_NAME, DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR, DATA_TRANSFORMATION_TRANSFORMED_OBJECT_DIR
 from store.constant.training_pipeline_config.data_validation import DATA_VALIDATION_DIR_NAME, DATA_VALIDATION_DRIFT_REPORT_DIR, DATA_VALIDATION_DRIFT_REPORT_FILE_NAME, DATA_VALIDATION_INVALID_DIR, DATA_VALIDATION_VALID_DIR
-from store.entity.config_entity import DataValidationConfig, TrainingPipelineConfig, DataIngestionConfig
+from store.entity.config_entity import DataTransformationConfig, DataValidationConfig, TrainingPipelineConfig, DataIngestionConfig
 from store.exception import CustomException
 from store.logger import logger
 from store.constant.training_pipeline_config import *
@@ -64,6 +66,29 @@ class StoreConfig():
             )
             logger.info(f"Data validation config: {data_validation_config}")
             return data_validation_config
+        except Exception as e:
+            raise CustomException(e,sys)
+
+    def get_data_transformation_config(self)->DataTransformationConfig:
+        try:
+            data_transformation_dir = os.path.join(self.pipeline_config.artifact_dir,DATA_TRANSFORMATION_DIR_NAME)
+            data_transformation_config = DataTransformationConfig(
+                data_transformation_dir=data_transformation_dir,
+                transformed_train_file_path=os.path.join(data_transformation_dir, 
+                                                         DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR,
+                                                         TRAIN_FILE_NAME.replace('csv', 'npy')),
+                transformed_test_file_path=os.path.join(data_transformation_dir,
+                                                        DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR,
+                                                        TEST_FILE_NAME.replace('csv', 'npy')),
+                transformed_object_file_path=os.path.join(data_transformation_dir,
+                                                          DATA_TRANSFORMATION_TRANSFORMED_OBJECT_DIR,
+                                                          PREPROCESSING_OBJECT_FILE_NAME),
+                transformed_target_object_file_path=os.path.join(data_transformation_dir,
+                                                          DATA_TRANSFORMATION_TRANSFORMED_OBJECT_DIR,
+                                                          TARGET_PREPROCESSING_OBJECT_FILE_NAME),
+            )
+            logger.info(f'Data Transformation Config: {data_transformation_config}')
+            return data_transformation_config
         except Exception as e:
             raise CustomException(e,sys)
 

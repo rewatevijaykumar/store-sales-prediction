@@ -11,3 +11,9 @@ DataValidationArtifact = namedtuple('DataValidationArtifact',
                                      'invalid_train_file_path',
                                      'invalid_test_file_path',
                                      'drift_report_file_path'])
+
+DataTransformationArtifact = namedtuple('DataTransformationArtifact',
+                                        ['transformed_object_file_path',
+                                         'transformed_train_file_path',
+                                         'transformed_test_file_path',
+                                         'transformed_target_object_file_path'])
