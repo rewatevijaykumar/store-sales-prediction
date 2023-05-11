@@ -24,6 +24,7 @@ def write_yaml_file(file_path:str, content:str,replace:bool = False) -> None:
     file_path: str
     """
     try:
+        logger.info('Entered write_yaml_file method of Main utils')
         if replace:
             if os.path.exists(file_path):
                 os.remove(file_path)
@@ -49,6 +50,7 @@ def save_numpy_array_data(file_path:str, array:np.array):
     array: np.array data to save
     '''
     try:
+        logger.info('Entered save_numpy_array_data method of Main utils')
         dir_path = os.path.dirname(file_path)
         os.makedirs(dir_path, exist_ok=True)
         with open(file_path, 'wb') as file_obj:
@@ -63,6 +65,7 @@ def load_numpy_array_data(file_path:str) -> np.array:
     return: np.array data loaded
     '''
     try:
+        logger.info('Entered load_numpy_array_data method of Main utils')
         with open(file_path, 'rb') as file_obj:
             return np.load(file_obj)
     except Exception as e:

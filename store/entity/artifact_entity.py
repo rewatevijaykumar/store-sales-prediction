@@ -28,3 +28,14 @@ ModelTrainerArtifact = namedtuple('ModelTrainerArtifact',
                                    'train_metric_artifact',
                                    'test_metric_artifact'])
 
+ModelEvaluationArtifact = namedtuple('ModelEvaluationArtifact',
+                                     ['is_model_accepted',
+                                      'improved_accuracy',
+                                      'best_model_path',
+                                      'trained_model_path',
+                                      'train_model_metric_artifact',
+                                      'best_model_metric_artifact'])
+
+ModelPusherArtifact = namedtuple('ModelPusherArtifact',
+                                 ['saved_model_path',
+                                  'model_file_path'])

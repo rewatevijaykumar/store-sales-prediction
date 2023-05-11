@@ -3,6 +3,8 @@ from store.constant.training_pipeline_config.data_ingestion import *
 from store.constant.training_pipeline_config.data_validation import *
 from store.constant.training_pipeline_config.data_transformation import *
 from store.constant.training_pipeline_config.model_trainer import *
+from store.constant.training_pipeline_config.model_evaluation import *
+from store.constant.training_pipeline_config.model_pusher import *
 
 SAVED_MODEL_DIR = os.path.join('saved_models')
 

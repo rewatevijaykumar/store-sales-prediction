@@ -30,3 +30,13 @@ ModelTrainerConfig = namedtuple('ModelTrainerConfig',
                                  'trained_model_file_path',
                                  'expected_accuracy',
                                  'overfitting_underfitting_threshold'])
+
+ModelEvaluationConfig = namedtuple('ModelEvaluationConfig',
+                                ['model_evaluation_dir',
+                                 'change_threshold',
+                                 'report_file_path'])
+
+ModelPusherConfig = namedtuple('ModelPusherConfig',
+                                ['model_pusher_dir',
+                                 'model_file_path',
+                                 'saved_model_path'])

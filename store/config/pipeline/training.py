@@ -1,4 +1,5 @@
-from store.entity.config_entity import DataTransformationConfig, DataValidationConfig, ModelTrainerConfig, TrainingPipelineConfig, DataIngestionConfig
+from store.constant.training_pipeline_config import model_evaluation
+from store.entity.config_entity import DataTransformationConfig, DataValidationConfig, ModelEvaluationConfig, ModelPusherConfig, ModelTrainerConfig, TrainingPipelineConfig, DataIngestionConfig
 from store.exception import CustomException
 from store.logger import logger
 from store.constant.training_pipeline_config import *
@@ -97,12 +98,36 @@ class StoreConfig():
                 trained_model_file_path=os.path.join(model_trainer_dir,MODEL_TRAINER_TRAINED_MODEL_DIR,MODEL_TRAINER_TRAINED_MODEL_NAME),
                 expected_accuracy=MODEL_TRAINER_EXPECTED_SCORE,
                 overfitting_underfitting_threshold=MODEL_TRAINER_OVER_FITTING_UNDER_FITTING_THRESHOLD
-                 
             )
             logger.info(f'Model Trainer Config: {model_trainer_config}')
             return model_trainer_config
         except Exception as e:
             raise CustomException(e,sys)
+        
+    def get_model_evaluation_config(self)->ModelEvaluationConfig:
+        try:
+            model_evaluation_dir = os.path.join(self.pipeline_config.artifact_dir, MODEL_EVALUATION_DIR_NAME)
+            model_evaluation_config = ModelEvaluationConfig(
+                model_evaluation_dir=model_evaluation_dir,
+                change_threshold = MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE,
+                report_file_path=os.path.join(model_evaluation_dir,MODEL_EVALUATION_REPORT_FILE_NAME)
+            )
+            logger.info(f'Model Evaluation Config: {model_evaluation_config}')
+            return model_evaluation_config
+        except Exception as e:
+            raise CustomException(e,sys)
 
+    def get_model_pusher_config(self)->ModelPusherConfig:
+        try:
+            model_pusher_dir = os.path.join(self.pipeline_config.artifact_dir,MODEL_PUSHER_DIR_NAME)
+            model_pusher_config = ModelPusherConfig(
+                model_pusher_dir=model_pusher_dir,
+                model_file_path=os.path.join(model_pusher_dir,MODEL_FILE_NAME),
+                saved_model_path=os.path.join(SAVED_MODEL_DIR,self.timestamp,MODEL_FILE_NAME)
+            )
+            logger.info(f'Model Pusher Config: {model_pusher_config}')
+            return model_pusher_config
+        except Exception as e:
+            raise CustomException(e,sys)
 
     
