@@ -11,4 +11,7 @@ certifi
 PyYAML
 scipy
 dill
+fastapi
+uvicorn
+python-multipart
 -e .

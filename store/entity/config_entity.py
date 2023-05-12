@@ -39,4 +39,5 @@ ModelEvaluationConfig = namedtuple('ModelEvaluationConfig',
 ModelPusherConfig = namedtuple('ModelPusherConfig',
                                 ['model_pusher_dir',
                                  'model_file_path',
-                                 'saved_model_path'])
+                                 'saved_model_path',
+                                 'target_object_file_path'])

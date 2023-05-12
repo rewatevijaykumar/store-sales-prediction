@@ -123,7 +123,8 @@ class StoreConfig():
             model_pusher_config = ModelPusherConfig(
                 model_pusher_dir=model_pusher_dir,
                 model_file_path=os.path.join(model_pusher_dir,MODEL_FILE_NAME),
-                saved_model_path=os.path.join(SAVED_MODEL_DIR,self.timestamp,MODEL_FILE_NAME)
+                saved_model_path=os.path.join(SAVED_MODEL_DIR,self.timestamp,MODEL_FILE_NAME),
+                target_object_file_path=os.path.join(SAVED_MODEL_DIR,self.timestamp,TARGET_PREPROCESSING_OBJECT_FILE_NAME)
             )
             logger.info(f'Model Pusher Config: {model_pusher_config}')
             return model_pusher_config

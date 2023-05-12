@@ -15,6 +15,7 @@ from store.logger import logger
 from store.config.pipeline.training import StoreConfig
 
 class TrainingPipeline:
+    is_pipeline_running = False
     def __init__(self,store_config:StoreConfig):
         self.store_config = store_config
 
@@ -73,10 +74,13 @@ class TrainingPipeline:
             raise CustomException(e,sys)
 
  
-    def start_model_pusher(self,model_evaluation_artifact:ModelEvaluationArtifact):
+    def start_model_pusher(self,
+                           data_transformation_artifact:DataTransformationArtifact,
+                            model_evaluation_artifact:ModelEvaluationArtifact):
         try:
             model_pusher_config = self.store_config.get_model_pusher_config()
             model_pusher = ModelPusher(
+                data_transformation_artifact=data_transformation_artifact,
                 model_evaluation_artifact=model_evaluation_artifact,
                 model_pusher_config=model_pusher_config)
             model_pusher_artifact = model_pusher.initiate_model_pusher()
@@ -86,6 +90,7 @@ class TrainingPipeline:
 
     def run_pipeline(self):
         try:
+            TrainingPipeline.is_pipeline_running=True
             data_ingestion_artifact = self.start_data_ingestion()
             data_validation_artifact = self.start_data_validation(data_ingestion_artifact=data_ingestion_artifact)
             data_transformation_artifact = self.start_data_transformation(data_validation_artifact=data_validation_artifact)
@@ -95,8 +100,10 @@ class TrainingPipeline:
                 model_trainer_artifact=model_trainer_artifact)
             if not model_evaluation_artifact.is_model_accepted:
                 raise Exception('Trained model is not better than the best model')
-            model_pusher_artifact = self.start_model_pusher(model_evaluation_artifact=model_evaluation_artifact)
-
+            model_pusher_artifact = self.start_model_pusher(
+                data_transformation_artifact=data_transformation_artifact,
+                model_evaluation_artifact=model_evaluation_artifact)
+            TrainingPipeline.is_pipeline_running=False
         except Exception as e:
-            print(e)
+            TrainingPipeline.is_pipeline_running=False
             raise CustomException(e,sys)
