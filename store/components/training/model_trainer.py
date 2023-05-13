@@ -1,6 +1,8 @@
+import logging
 import os,sys
 from catboost import CatBoostRegressor
 from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.model_selection import RandomizedSearchCV
 from store.logger import logger
 from store.exception import CustomException
 from store.utils import load_numpy_array_data, load_object, save_object
@@ -20,15 +22,29 @@ class ModelTrainer:
         except Exception as e:
             raise CustomException(e,sys)
     
-    def train_model(self,x_train,y_train):
+    def train_model(self,x_train,y_train,params):
         try:
             gbr_reg = GradientBoostingRegressor()
+            gbr_reg.set_params(**params)
             gbr_reg.fit(x_train,y_train)
             return gbr_reg
         except Exception as e:
             raise CustomException(e,sys)
         
-    def perform_hyperparameter_tuning(self):...
+    def perform_hyperparameter_tuning(self,x_train,y_train)->dict:
+        params={          
+            # 'loss':['squared_error', 'absolute_error', 'huber', 'quantile'],
+            # 'criterion':['friedman_mse', 'squared_error'],
+            # 'max_features': ['auto', 'sqrt', 'log2'],
+            'n_estimators':[100,200,300],
+            'subsample':[0.6,0.7,0.8],
+            'alpha':[0.001, 0.005, 0.01, 0.05, 0.1, 0.5, 0.99],
+            # 'max_depth': [6,8,10],
+            'learning_rate': [0.01, 0.05, 0.1],
+        }
+        rs = RandomizedSearchCV(GradientBoostingRegressor(), params, cv=3,n_jobs=-1)
+        rs.fit(x_train,y_train)
+        return rs.best_params_
 
     def initiate_model_trainer(self)->ModelTrainerArtifact:
         try:
@@ -45,19 +61,23 @@ class ModelTrainer:
                 test_arr[:,:-1],
                 test_arr[:,-1],
             )
-
-            model = self.train_model(x_train=x_train,y_train=y_train)
+            params = self.perform_hyperparameter_tuning(x_train=x_train,y_train=y_train)
+            logger.info(f'Best Hyperparameters: {params}')
+            model = self.train_model(x_train=x_train,y_train=y_train,params=params)
             y_train_pred = model.predict(x_train)
             regression_train_metric = get_regression_score(y_true=y_train,y_pred=y_train_pred)
+            logger.info(f'Training Metric: {regression_train_metric}')
 
             if regression_train_metric.r2_score <= self.model_trainer_config.expected_accuracy:
                 raise Exception('Trained model is not good to provide expected accuracy')
             
             y_test_pred = model.predict(x_test)
             regression_test_metric = get_regression_score(y_true=y_test,y_pred=y_test_pred)
+            logger.info(f'Testing Metric: {regression_test_metric}')
 
             # check overfitting and underfitting
             diff = abs(regression_train_metric.r2_score - regression_test_metric.r2_score)
+            logger.info(f'Diff: {diff}')
 
             if diff > self.model_trainer_config.overfitting_underfitting_threshold:
                 raise Exception('model is not good try to do more experimentation')
