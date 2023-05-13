@@ -53,7 +53,7 @@ async def predict_route(file: UploadFile = File(...)):
         # Read the CSV file into a Pandas DataFrame
         df = pd.read_csv(file.file, na_values = 'na')
         df.replace({'na':np.nan}, inplace=True)
-        columns = read_yaml_file(SCHEMA_FILE_PATH)['columns']
+        columns = read_yaml_file(SCHEMA_FILE_PATH)['columns'][:-1]
         # Create a dictionary to map column names to their corresponding data types
         data_types = {}
         for col in columns:

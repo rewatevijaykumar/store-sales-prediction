@@ -14,4 +14,5 @@ dill
 fastapi
 uvicorn
 python-multipart
+category_encoders
 -e .
