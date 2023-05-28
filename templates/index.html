@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Big Mart Sales Prediction</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+
+    body {
+      background-image: url("https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+    }
+    .container {
+      max-width: 700px;
+      margin-top: 50px;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .error {
+      color: red;
+    }
+    h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 36px;
+      color: #008080;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    h1, h2, h3 {
+      color: #35495e;
+    }
+    
+    .btn {
+      background-color: #35495e;
+      border-color: #35495e;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #253447;
+      border-color: #253447;
+      transform: scale(1.05);
+    }
+    
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Big Mart Sales Prediction</h1>
+    <hr>
+    <br><br>
+    <h2>Train Model</h2>
+    <hr>
+      <form id="trainForm" >
+        <button id="trainBtn" type="submit" class="btn btn-primary">Train</button>
+      </form>
+    <br><br>
+    <div id="progress" style="display: none;">
+      <h4>Processing...</h4>
+      <progress style="width: 100%;"></progress>
+    </div>
+    <div id="trainResult" style="display: none;">
+      <h4 id="message"></h4>
+      <h4 id="errorMessage"></h4>
+    </div>
+    <br><br>
+    <h2>Product Input Form</h2>
+    <hr>
+    <form id="productForm">
+      <div class="form-group">
+        <label for="itemIdentifier">Item Identifier:</label>
+        <input type="text" class="form-control" id="itemIdentifier" required>
+      </div>
+      <div class="form-group">
+        <label for="itemWeight">Item Weight:</label>
+        <input type="text" class="form-control" id="itemWeight" required>
+      </div>
+      <div class="form-group">
+        <label for="itemFatContent">Item Fat Content:</label>
+        <input type="text" class="form-control" id="itemFatContent" required>
+      </div>
+      <div class="form-group">
+        <label for="itemVisibility">Item Visibility (%):</label>
+        <input type="text" class="form-control" id="itemVisibility" required>
+      </div>
+      <div class="form-group">
+        <label for="itemType">Item Type:</label>
+        <input type="text" class="form-control" id="itemType" required>
+      </div>
+      <div class="form-group">
+        <label for="itemMRP">Item MRP:</label>
+        <input type="text" class="form-control" id="itemMRP" required>
+      </div>
+      <div class="form-group">
+        <label for="outletIdentifier">Outlet Identifier:</label>
+        <input type="text" class="form-control" id="outletIdentifier" required>
+      </div>
+      <div class="form-group">
+        <label for="outletYear">Outlet Establishment Year:</label>
+        <input type="text" class="form-control" id="outletYear" required>
+      </div>
+      <div class="form-group">
+        <label for="outletSize">Outlet Size:</label>
+        <input type="text" class="form-control" id="outletSize" required>
+      </div>
+      <div class="form-group">
+        <label for="outletLocation">Outlet Location Type:</label>
+        <input type="text" class="form-control" id="outletLocation" required>
+      </div>
+      <div class="form-group">
+        <label for="outletType">Outlet Type:</label>
+        <input type="text" class="form-control" id="outletType" required>
+      </div>
+      <div class="form-group">
+        <label for="itemSales">Item Outlet Sales:</label>
+        <input type="text" class="form-control" id="itemSales" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <br>
+    <div id="result">
+    </div>
+  </div>
+  <br>
+  <br>
+
+  <script>
+
+    document.getElementById('trainForm').addEventListener('submit', function(e) {
+      e.preventDefault();  // Prevent form submission
+
+      
+      // Disable the submit button
+      document.getElementById('trainBtn').disabled = true;
+      
+      // Hide the result
+      document.getElementById('trainResult').style.display = 'none';
+
+      document.getElementById('progress').style.display = 'block';
+
+      // Send the POST request using Fetch
+      fetch('/train', {
+              method: 'POST',
+          })
+          .then(function(response) {
+              if (response.ok) {
+                  return response.text();  // Read response as text
+              } else {
+                  throw new Error('Error: ' + response.status);
+              }
+          })
+          .then(function(data) {
+              // Show the response message
+              document.getElementById('progress').style.display = 'none';
+              document.getElementById('trainResult').style.display = 'block';
+              document.getElementById('message').textContent = data;
+              // Enable the submit button
+              document.getElementById('trainBtn').disabled = false;
+          })
+          .catch(function(error) {
+              // Show the error message
+              document.getElementById('progress').style.display = 'none';
+              document.getElementById('trainResult').style.display = 'block';
+              document.getElementById('errorMessage').textContent = error.message;
+              // Enable the submit button
+              document.getElementById('trainBtn').disabled = false;
+          });
+  });
+  // Reset form and hide the trainResult when the submit button is clicked again
+  document.getElementById('trainBtn').addEventListener('click', function() {
+      document.getElementById('trainForm').reset();
+      document.getElementById('trainResult').style.display = 'none';
+  });
+
+    document.getElementById('productForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent form submission
+      if (validateForm()) {
+        // If the form is valid, submit the data to the server
+        submitForm();
+      }
+    });
+    
+    
+    
+          function validateForm() {
+        // Validate the form inputs
+        var itemWeight = document.getElementById('itemWeight').value;
+        var itemVisibility = document.getElementById('itemVisibility').value;
+        var itemMRP = document.getElementById('itemMRP').value;
+        var outletYear = document.getElementById('outletYear').value;
+
+        var isValid = true;
+
+        // Validate itemWeight
+        if (isNaN(itemWeight) || itemWeight <= 0) {
+          isValid = false;
+          document.getElementById('itemWeight').classList.add('error');
+        } else {
+          document.getElementById('itemWeight').classList.remove('error');
+        }
+
+        // Validate itemVisibility
+        if (isNaN(itemVisibility) || itemVisibility < 0 || itemVisibility > 100) {
+          isValid = false;
+          document.getElementById('itemVisibility').classList.add('error');
+        } else {
+          document.getElementById('itemVisibility').classList.remove('error');
+        }
+
+        // Validate itemMRP
+        if (isNaN(itemMRP) || itemMRP <= 0) {
+          isValid = false;
+          document.getElementById('itemMRP').classList.add('error');
+        } else {
+          document.getElementById('itemMRP').classList.remove('error');
+        }
+
+        // Validate outletYear
+        if (isNaN(outletYear) || outletYear <= 0) {
+          isValid = false;
+          document.getElementById('outletYear').classList.add('error');
+        } else {
+          document.getElementById('outletYear').classList.remove('error');
+        }
+
+        return isValid;
+      }
+
+      function submitForm() {
+        // Prepare the form data
+        var itemIdentifier = document.getElementById('itemIdentifier').value;
+        var itemWeight = parseFloat(document.getElementById('itemWeight').value);
+        var itemFatContent = document.getElementById('itemFatContent').value;
+        var itemVisibility = parseFloat(document.getElementById('itemVisibility').value);
+        var itemType = document.getElementById('itemType').value;
+        var itemMRP = parseFloat(document.getElementById('itemMRP').value);
+        var outletIdentifier = document.getElementById('outletIdentifier').value;
+        var outletYear = parseInt(document.getElementById('outletYear').value);
+        var outletSize = document.getElementById('outletSize').value;
+        var outletLocation = document.getElementById('outletLocation').value;
+        var outletType = document.getElementById('outletType').value;
+        var itemSales = parseFloat(document.getElementById('itemSales').value);
+
+        // Create an object with the form data
+        var formData = {
+          itemIdentifier: itemIdentifier,
+          itemWeight: itemWeight,
+          itemFatContent: itemFatContent,
+          itemVisibility: itemVisibility,
+          itemType: itemType,
+          itemMRP: itemMRP,
+          outletIdentifier: outletIdentifier,
+          outletYear: outletYear,
+          outletSize: outletSize,
+          outletLocation: outletLocation,
+          outletType: outletType,
+          itemSales: itemSales
+        };
+
+        // Send the form data to the server
+        fetch('/predict', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        })
+          .then(function(response) {
+            return response.json();
+          })
+          .then(function(data) {
+            // Display the prediction result
+            var resultContainer = document.getElementById('result');
+            resultContainer.innerHTML = '<h3>Outlet Sales Prediction: ' + data + '</h3>';
+          })
+          .catch(function(error) {
+            console.log('Error:', error);
+          });
+      }
+    </script>
+  </html>
+

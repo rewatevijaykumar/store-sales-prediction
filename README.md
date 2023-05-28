@@ -22,11 +22,15 @@ different stores of Big Mart according to the provided dataset.
 # Tech Stack Used
 
 1. Python
-2. FastAPI
+2. FastAPI or Flask App
 3. Machine Learning Algorithm
 4. Docker
 5. MongoDB
 
+
+![Flask App](/documents/flask-app.png "Flask App")
+
+![FastAPI](/documents/fastapi.png "FastApi")
 
 ## Dataset:
 
@@ -45,7 +49,7 @@ We have train (8523) and test (5681) data set, train data set has both input and
 - Outlet_Type: Whether the outlet is just a grocery store or some sort of supermarket
 - Item_Outlet_Sales: Sales of the product in the particulat store. This is the outcome variable to be predicted
 
-## Deploy using docker
+## Deploy FastApi using docker
 
 ### 1. Build ->
 `
@@ -60,3 +64,24 @@ docker images
 docker run -p <host-port>:<container-port> <docker-image>
 `
 
+## Running Flask App
+
+### 1. Create Virtual Environment
+`
+virtualenv venv
+`
+
+### 2. Activate virtual environment
+`
+source venv/Scripts/activate
+`
+
+### 3. Install Requirements
+`
+pip install -r requirements.txt
+`
+
+### 4. Run application
+`
+python flask_main.py
+`
